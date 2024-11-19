@@ -1,0 +1,28 @@
+<tool id="fastqc_multiqc" name="FASTQC/MULTIQC" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p inputs && 
+        mkdir -p outputs && 
+        julia "${__tool_directory__}/fastqc_multiqc.jl" 
+            #for $key in $files.keys()
+                --names $key 
+                --files $files[$key] 
+            #end for
+            --input_dir inputs 
+            --output_dir outputs && 
+        cd outputs && 
+        tar --use-compress-program=pigz -cvf fastqc_multiqc_outputs.tgz * 
+    ]]></command>
+    <inputs>
+        <param format="fastq,fastq.gz,fastq.bz2,fastqsanger,fastqsanger.gz,fastqsanger.bz2" name="files" type="data_collection" collection_type="list" label="List of FASTQ Files"/>
+    </inputs>
+    <outputs>
+	    <collection name="fastqc_multiqc_outputs" type="list" label="${tool.name} on ${on_string}: run fastqc/multiqc over FASTQ files">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.tgz$)" format="tgz" directory="outputs" visible="false"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+        Run fastqc/multiqc over FASTQ files.
+
+        In terms of the current situation, exposing extra parameters of fastqc and multiqc is not essential.
+    ]]></help>
+</tool>

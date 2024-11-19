@@ -1,0 +1,39 @@
+<tool id="extract_rsem_results" name="Extract RSEM Results" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p inputs && 
+        mkdir -p outputs && 
+        Rscript "${__tool_directory__}/extract_rsem_results.R" 
+            #for $key in $files.keys()
+                --names $key 
+                --files $files[$key] 
+            #end for
+            --input_dir inputs 
+            --output_dir outputs 
+            --type $type_selector 
+            --metadata_tsv $species_selector 
+    ]]></command>
+    <inputs>
+        <param format="tabular" name="files" type="data_collection" collection_type="list" label="List of RSEM Result Files"/>
+        <param name="type_selector" type="select" label="To extract which type of data">
+            <option value="gene" selected="true">Gene</option>
+            <option value="isoform">Isoform</option>
+        </param>
+        <param name="species_selector" type="select" label="Select the species of your data">
+            <option value="/data/biodatabase/species/mm10/encode_references/bulk_rna_seq/mm10_metadata.tsv" selected="true">mm10</option>
+            <option value="/data/biodatabase/species/hg38/encode_references/bulk_rna_seq/hg38_metadata.tsv">hg38</option>
+            <option value="/data/biodatabase/species/mRatBN7/encode_references/bulk_rna_seq/mRatBN7_metadata.tsv">mRatBN7</option>
+            <option value="/data/biodatabase/species/mink_slb_v1/encode_references/bulk_rna_seq/mink_metadata.tsv">mink_slb_v1</option>
+        </param>
+    </inputs>
+    <outputs>
+        <collection name="extract_rsem_results_outputs" type="list" label="${tool.name} on ${on_string}: extract RSEM results">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.tsv$)" format="tsv" directory="outputs" visible="false"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+        Extract RSEM results.
+
+        This will generate a sample sheet file, a raw counts matrix, a TPM matrix, and an FPKM matrix.
+        All these files are of TSV format.
+    ]]></help>
+</tool>

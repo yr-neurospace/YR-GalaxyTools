@@ -1,0 +1,42 @@
+<tool id="go_enrichment_analysis" name="GO Enrichment Analysis" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p inputs && 
+        mkdir -p outputs && 
+        Rscript "${__tool_directory__}/go_enrichment_analysis.R" 
+            #for $key in $files.keys()
+                --names $key 
+                --files $files[$key] 
+            #end for
+            --input_dir inputs 
+            --output_dir outputs 
+            --metadata_tsv $species_selector 
+            --group_column $group_column 
+            --gene_id_column $gene_id_column 
+            --gene_id_type $gene_id_type_selector && 
+        cd outputs && 
+        tar --use-compress-program=pigz -cvf go_enrichment_analysis_results.tgz *.tsv *.rds 
+    ]]></command>
+    <inputs>
+        <param format="tabular" name="files" type="data_collection" collection_type="list" label="List of gene list files"/>
+        <param name="gene_id_type_selector" type="select" label="Gene ID type">
+            <option value="SYMBOL" selected="true">SYMBOL</option>
+            <option value="ENTREZID">ENTREZID</option>
+            <option value="ENSEMBL">ENSEMBL</option>
+        </param>
+        <param name="species_selector" type="select" label="Select the species of your data">
+            <option value="/data/biodatabase/species/mm10/encode_references/bulk_rna_seq/mm10_metadata.tsv" selected="true">mm10</option>
+            <option value="/data/biodatabase/species/hg38/encode_references/bulk_rna_seq/hg38_metadata.tsv">hg38</option>
+            <option value="/data/biodatabase/species/mRatBN7/encode_references/bulk_rna_seq/mRatBN7_metadata.tsv">mRatBN7</option>
+        </param>
+        <param name="group_column" type="text" value="diff_flag" label="Group column name"/>
+        <param name="gene_id_column" type="text" value="gene_name" label="Gene IDs column name"/>
+    </inputs>
+    <outputs>
+        <collection name="go_enrichment_analysis_outputs" type="list" label="${tool.name} on ${on_string}: GO enrichment analysis">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.tgz$)" format="tgz" directory="outputs" visible="false"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+        GO enrichment analysis over GO terms (BP/CC/MF) using clusterProfiler.
+    ]]></help>
+</tool>

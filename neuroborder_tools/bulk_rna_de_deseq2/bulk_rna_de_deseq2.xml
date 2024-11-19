@@ -1,0 +1,63 @@
+<tool id="bulk_rna_de_deseq2" name="Bulk RNA-seq DE with DESeq2" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p inputs && 
+        mkdir -p outputs && 
+        Rscript "${__tool_directory__}/bulk_rna_de_deseq2.R" 
+            #for $key in $files.keys()
+                --names $key 
+                --files $files[$key] 
+            #end for
+            --input_dir inputs 
+            --output_dir outputs 
+            --type $type_selector 
+            --metadata_tsv $species_selector 
+            --sample_sheet_tsv $sample_sheet_file 
+            --tpm_tsv $tpm_file 
+            --padj_th $padj_th
+            --logfc_th $logfc_th 
+            --tpm_th $tpm_th 
+    ]]></command>
+    <inputs>
+        <param format="tabular" name="files" type="data_collection" collection_type="list" label="List of RSEM Result Files"/>
+        <param name="type_selector" type="select" label="To analyze which type of data">
+            <option value="gene" selected="true">Gene</option>
+            <option value="isoform">Isoform</option>
+        </param>
+        <param name="species_selector" type="select" label="Select the species of your data">
+            <option value="/data/biodatabase/species/mm10/encode_references/bulk_rna_seq/mm10_metadata.tsv" selected="true">mm10</option>
+            <option value="/data/biodatabase/species/hg38/encode_references/bulk_rna_seq/hg38_metadata.tsv">hg38</option>
+            <option value="/data/biodatabase/species/mRatBN7/encode_references/bulk_rna_seq/mRatBN7_metadata.tsv">mRatBN7</option>
+            <option value="/data/biodatabase/species/mink_slb_v1/encode_references/bulk_rna_seq/mink_metadata.tsv">mink_slb_v1</option>
+        </param>
+        <param name="sample_sheet_file" type="data" format="tabular,tsv" label="Sample sheet file" help = "This file can be retrieved from the results of tool `Extract RSEM Results`."/>
+        <param name="tpm_file" type="data" format="tabular,tsv" label="TPM/FPKM file" help = "This file can be retrieved from the results of tool `Extract RSEM Results`."/>
+        <param name="padj_th" type="float" value="0.05" label="Adjusted p-value threshold"/>
+        <param name="logfc_th" type="float" value="1" label="logFC threshold"/>
+        <param name="tpm_th" type="float" value="1" label="TPM/FPKM threshold"/>
+    </inputs>
+    <outputs>
+        <collection name="bulk_rna_de_deseq2_outputs" type="list" label="${tool.name} on ${on_string}: bulk RNA-seq DE with DESeq2">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.tgz$)" format="tgz" directory="outputs" visible="false"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+        Bulk RNA-seq differential expression (DE) analysis with DESeq2.
+
+        At present, this tool supports performing DE analysis over bulk RNA-seq quantification results retrieved from RSEM 
+        at gene or isoform level.
+
+        Both sample sheet and TPM/FPKM TSV files can be obtained from the results of tool `Extract RSEM Results`.
+
+        TPM/FPKM TSV file is used to filter out genes/isoforms with low expression levels.
+
+        This tool will return four types of files for `gene`/`isoform`:
+
+        - `raw`: only gene info is attached.
+
+        - `na_filter`: filter out genes/isoforms with NAs on fields: `baseMean`, `log2FoldChange`, `pvalue`, or `padj`.
+
+        - `unique_symbols`: filter out duplicated gene symbols or transcript IDs by using TPMs and other metrics if possible.
+
+        - `only_degs`: remove non-DEGs.
+    ]]></help>
+</tool>

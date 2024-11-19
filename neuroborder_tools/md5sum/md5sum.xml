@@ -1,0 +1,48 @@
+<tool id="md5sum" name="MD5SUM" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p inputs && 
+        mkdir -p outputs && 
+        cd inputs && 
+        julia "${__tool_directory__}/md5sum.jl" 
+            #for $key in $files.keys()
+                --names $key 
+                --files $files[$key] 
+            #end for
+            #if $md5_file
+                --md5_file $md5_file 
+            #end if
+            --input_dir inputs 
+            --output_dir ../outputs 
+            #if $quiet_selector == "yes"
+                --quiet 
+            #end if
+            #if $ignore_missing_files_selector == "yes"
+                --ignore_missing_files 
+            #end if
+    ]]></command>
+    <inputs>
+        <param name="files" type="data_collection" collection_type="list" label="List of Files"/>
+        <param name="md5_file" type="data" format="txt" optional="true" label="MD5 file" help="This is optional. If not provided, it will print MD5 checksums instead of checking MD5 checksums."/>
+        <param name="quiet_selector" type="select" label="Suppress errors when MD5 check failed">
+            <option value="yes">YES</option>
+            <option value="no" selected="true">NO</option>
+        </param>
+        <param name="ignore_missing_files_selector" type="select" label="Skip checking files within MD5 file but not existed any more">
+            <option value="yes">YES</option>
+            <option value="no" selected="true">NO</option>
+        </param>
+    </inputs>
+    <outputs>
+	    <collection name="md5sum_outputs" type="list" label="${tool.name} on ${on_string}: print or check MD5 checksums">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.txt$)" format="txt" directory="outputs" visible="false"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+        Print or check MD5 checksums.
+
+        The input MD5 file is optional. If not given, it will print MD5 checksums instead of checking MD5 checksums.
+
+        If you choose to suppress errors, then files with incorrect MD5 checksums will be labeled with "NO".
+        Otherwise, the program will raise errors and exit.
+    ]]></help>
+</tool>

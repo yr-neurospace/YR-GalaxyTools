@@ -1,0 +1,31 @@
+<tool id="trim_galore" name="Trim Galore" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p inputs && 
+        mkdir -p outputs && 
+        julia "${__tool_directory__}/trim_galore.jl" 
+            #for $key in $files.keys()
+                --names $key 
+                --files $files[$key] 
+            #end for
+            --input_dir inputs 
+            --output_dir outputs && 
+        cd outputs && 
+        tar --use-compress-program=pigz -cvf trim_galore_reports.tgz *.txt 
+    ]]></command>
+    <inputs>
+        <param format="fastq,fastq.gz,fastq.bz2,fastqsanger,fastqsanger.gz,fastqsanger.bz2" name="files" type="data_collection" collection_type="list" label="List of FASTQ Files"/>
+    </inputs>
+    <outputs>
+	    <collection name="trim_galore_fq_gzs" type="list" label="${tool.name} on ${on_string} - FASTQs: run Trim Galore on FASTQ files">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.(fastq|fq)\.gz$)" format="fastq.gz" directory="outputs" visible="false"/>
+        </collection>
+        <collection name="trim_galore_reports" type="list" label="${tool.name} on ${on_string} - Reports: run Trim Galore on FASTQ files">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.tgz$)" format="tgz" directory="outputs" visible="false"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+        Run Trim Galore on FASTQ files.
+
+        In terms of the current situation, exposing extra parameters of trim_galore is not essential.
+    ]]></help>
+</tool>

@@ -1,0 +1,59 @@
+<tool id="encode_bulk_rna_seq_pipeline" name="ENCODE Bulk RNA-seq Pipeline" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p inputs && 
+        mkdir -p outputs && 
+        julia "${__tool_directory__}/encode_bulk_rna_seq_pipeline.jl" 
+            #for $key in $files.keys()
+                --names $key 
+                --files $files[$key] 
+            #end for
+            --input_dir inputs 
+            --output_dir outputs 
+            --metadata_tsv $species_selector 
+            --num_jobs 2 
+    ]]></command>
+    <inputs>
+        <param format="fastq,fastq.gz,fastq.bz2,fastqsanger,fastqsanger.gz,fastqsanger.bz2" name="files" type="data_collection" collection_type="list" label="List of FASTQ Files"/>
+        <param name="species_selector" type="select" label="Select the species you want to align and quantify your reads to">
+            <option value="/data/biodatabase/species/mm10/encode_references/bulk_rna_seq/mm10_metadata.tsv" selected="true">mm10</option>
+            <option value="/data/biodatabase/species/hg38/encode_references/bulk_rna_seq/hg38_metadata.tsv">hg38</option>
+            <option value="/data/biodatabase/species/mRatBN7/encode_references/bulk_rna_seq/mRatBN7_metadata.tsv">mRatBN7</option>
+            <option value="/data/biodatabase/species/mink_slb_v1/encode_references/bulk_rna_seq/mink_metadata.tsv">mink_slb_v1</option>
+        </param>
+    </inputs>
+    <outputs>
+        <collection name="encode_bulk_rna_seq_outputs" type="list" label="${tool.name} on ${on_string}: run ENCODE bulk RNA-seq pipeline">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+\.tgz$)" format="tgz" directory="outputs" visible="false"/>
+        </collection>
+    </outputs>
+    <help><![CDATA[
+        Run ENCODE bulk RNA-seq pipeline.
+
+        In terms of the current situation, exposing extra parameters of caper/croo is not essential.
+
+        **Note: input FASTQ file names must strictly adhere to the following rules otherwise you will get unexpected outputs!**
+
+        - Single-end: `ID_repN[_partN].(fastq|fq).gz`
+
+        - Paired-end: `ID_repN[_partN].R(1|2).(fastq|fq).gz`
+
+        `ID` is the sample name, which can only contain `[a-zA-Z0-9]` and does **NOT** start with `[0-9]`.
+
+        `repN` means the `N`th biological replicate.
+
+        `partN` means the `N`th technical replicate. All technical replicates with the same `ID_repN` 
+        should be merged into a single FASTQ file before running downstream analyses. This will be done 
+        by ENCODE bulk RNA-seq pipeline before performing alignment and quantification.
+
+        `N` can only contain `[0-9]`.
+
+        **Even though you have only one biological replicate, `rep1` CANNOT be omitted.**
+        **If you have only one technical replicate, `part1` CAN be omitted.**
+
+        e.g. 
+        For paired-end samples: `Brain1_rep1.fastq.R1.gz`, `Brain1_rep1.fastq.R2.gz`, 
+        `Brain1_rep2_part1.R1.fq.gz`, `Brain1_rep2_part2.R1.fastq.gz`, 
+        `Brain1_rep2_part1.R2.fq.gz`, `Brain1_rep2_part2.R2.fastq.gz`.
+        For single-end samples: `Cortex_rep1.fq.gz`, `Cortex_rep2_part1.fq.gz`, `Cortex_rep2_part2.fastq.gz`.
+    ]]></help>
+</tool>
