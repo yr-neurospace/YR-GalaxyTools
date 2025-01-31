@@ -4,10 +4,10 @@ using JSON
 using CSV
 using DataFrames
 
-TEMPLATES = Dict("rna_pipeline_wdl" => "/opt/encode_pipeline/rna-seq-pipeline_v1.2.4/rna-seq-pipeline.wdl",
-    "rna_pe_json_without_kallisto" => "/opt/encode_pipeline/rna-seq-pipeline_v1.2.4/json_templates/rna_input_no_kallisto_pe.json",
-    "rna_se_json_without_kallisto" => "/opt/encode_pipeline/rna-seq-pipeline_v1.2.4/json_templates/rna_input_no_kallisto_se.json",
-    "backend_conf" => "/opt/encode_pipeline/caper/local.conf")
+TEMPLATES = Dict("rna_pipeline_wdl" => "/data/softwares/encode_pipeline/rna-seq-pipeline_v1.2.4/rna-seq-pipeline.wdl",
+    "rna_pe_json_without_kallisto" => "/data/softwares/encode_pipeline/rna-seq-pipeline_v1.2.4/json_templates/rna_input_no_kallisto_pe.json",
+    "rna_se_json_without_kallisto" => "/data/softwares/encode_pipeline/rna-seq-pipeline_v1.2.4/json_templates/rna_input_no_kallisto_se.json",
+    "backend_conf" => "/data/softwares/encode_pipeline/caper/local.conf")
 
 s = ArgParseSettings(description="Run ENCODE RNA-seq pipeline.")
 @add_arg_table s begin

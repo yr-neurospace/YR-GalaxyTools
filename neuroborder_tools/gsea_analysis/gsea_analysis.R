@@ -59,7 +59,7 @@ orgdb <- loadDb(metadata_vec["orgdb"])
 
 for (local_file in args[["local_files"]]) {
     df <- vroom(local_file) %>%
-        dplyr::select(all_of(c(args[["lofc_column"]], args[["gene_id_column"]]))) %>%
+        dplyr::select(all_of(c(args[["logfc_column"]], args[["gene_id_column"]]))) %>%
         set_colnames(c("logfc", "gene_id")) %>%
         na.omit() %>%
         distinct() %>%
