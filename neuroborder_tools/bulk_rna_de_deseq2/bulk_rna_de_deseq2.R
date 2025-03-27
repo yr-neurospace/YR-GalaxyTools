@@ -18,7 +18,7 @@ CONST_LS <- list(
     )
 )
 
-parser <- ArgumentParser(description = "Bulk RNA-seq differential expression analysis.")
+parser <- ArgumentParser(description = "Bulk RNA-Seq differential expression analysis.")
 parser$add_argument("--names",
     type = "character", nargs = "+",
     action = "extend", required = TRUE,

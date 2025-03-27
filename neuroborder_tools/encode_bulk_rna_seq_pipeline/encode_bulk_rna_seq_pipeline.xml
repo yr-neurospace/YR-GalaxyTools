@@ -1,4 +1,4 @@
-<tool id="encode_bulk_rna_seq_pipeline" name="ENCODE Bulk RNA-seq Pipeline" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="encode_bulk_rna_seq_pipeline" name="ENCODE Bulk RNA-Seq Pipeline" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
     <command detect_errors="exit_code"><![CDATA[
         mkdir -p inputs && 
         mkdir -p outputs && 
@@ -19,15 +19,16 @@
             <option value="/data/biodatabase/species/hg38/encode_references/bulk_rna_seq/hg38_metadata.tsv">hg38</option>
             <option value="/data/biodatabase/species/mRatBN7/encode_references/bulk_rna_seq/mRatBN7_metadata.tsv">mRatBN7</option>
             <option value="/data/biodatabase/species/mink_slb_v1/encode_references/bulk_rna_seq/mink_metadata.tsv">mink_slb_v1</option>
+            <option value="/data/biodatabase/species/sugar_glider_slb_v1/encode_references/bulk_rna_seq/sugarglider_metadata.tsv">sugarglider_slb_v1</option>
         </param>
     </inputs>
     <outputs>
-        <collection name="encode_bulk_rna_seq_outputs" type="list" label="${tool.name} on ${on_string}: run ENCODE bulk RNA-seq pipeline">
+        <collection name="encode_bulk_rna_seq_outputs" type="list" label="${tool.name} on ${on_string}: run ENCODE bulk RNA-Seq pipeline">
             <discover_datasets pattern="(?P&lt;designation&gt;.+\.tgz$)" format="tgz" directory="outputs" visible="false"/>
         </collection>
     </outputs>
     <help><![CDATA[
-        Run ENCODE bulk RNA-seq pipeline.
+        Run ENCODE bulk RNA-Seq pipeline.
 
         In terms of the current situation, exposing extra parameters of caper/croo is not essential.
 
@@ -43,7 +44,7 @@
 
         `partN` means the `N`th technical replicate. All technical replicates with the same `ID_repN` 
         should be merged into a single FASTQ file before running downstream analyses. This will be done 
-        by ENCODE bulk RNA-seq pipeline before performing alignment and quantification.
+        by ENCODE bulk RNA-Seq pipeline before performing alignment and quantification.
 
         `N` can only contain `[0-9]`.
 

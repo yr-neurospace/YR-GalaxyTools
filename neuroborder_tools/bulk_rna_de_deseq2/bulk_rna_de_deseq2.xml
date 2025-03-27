@@ -1,4 +1,4 @@
-<tool id="bulk_rna_de_deseq2" name="Bulk RNA-seq DE with DESeq2" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="bulk_rna_de_deseq2" name="Bulk RNA-Seq DE with DESeq2" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
     <command detect_errors="exit_code"><![CDATA[
         mkdir -p inputs && 
         mkdir -p outputs && 
@@ -28,6 +28,7 @@
             <option value="/data/biodatabase/species/hg38/encode_references/bulk_rna_seq/hg38_metadata.tsv">hg38</option>
             <option value="/data/biodatabase/species/mRatBN7/encode_references/bulk_rna_seq/mRatBN7_metadata.tsv">mRatBN7</option>
             <option value="/data/biodatabase/species/mink_slb_v1/encode_references/bulk_rna_seq/mink_metadata.tsv">mink_slb_v1</option>
+            <option value="/data/biodatabase/species/sugar_glider_slb_v1/encode_references/bulk_rna_seq/sugarglider_metadata.tsv">sugarglider_slb_v1</option>
         </param>
         <param name="sample_sheet_file" type="data" format="tabular,tsv" label="Sample sheet file" help = "This file can be retrieved from the results of tool `Extract RSEM Results`."/>
         <param name="tpm_file" type="data" format="tabular,tsv" label="TPM/FPKM file" help = "This file can be retrieved from the results of tool `Extract RSEM Results`."/>
@@ -36,14 +37,14 @@
         <param name="tpm_th" type="float" value="1" label="TPM/FPKM threshold"/>
     </inputs>
     <outputs>
-        <collection name="bulk_rna_de_deseq2_outputs" type="list" label="${tool.name} on ${on_string}: bulk RNA-seq DE with DESeq2">
+        <collection name="bulk_rna_de_deseq2_outputs" type="list" label="${tool.name} on ${on_string}: bulk RNA-Seq DE with DESeq2">
             <discover_datasets pattern="(?P&lt;designation&gt;.+\.tgz$)" format="tgz" directory="outputs" visible="false"/>
         </collection>
     </outputs>
     <help><![CDATA[
-        Bulk RNA-seq differential expression (DE) analysis with DESeq2.
+        Bulk RNA-Seq differential expression (DE) analysis with DESeq2.
 
-        At present, this tool supports performing DE analysis over bulk RNA-seq quantification results retrieved from RSEM 
+        At present, this tool supports performing DE analysis over bulk RNA-Seq quantification results retrieved from RSEM 
         at gene or isoform level.
 
         Both sample sheet and TPM/FPKM TSV files can be obtained from the results of tool `Extract RSEM Results`.

@@ -157,5 +157,7 @@
     <tool file="neuroborder_tools/bulk_rna_de_deseq2/bulk_rna_de_deseq2.xml" />
     <tool file="neuroborder_tools/gsea_analysis/gsea_analysis.xml" />
     <tool file="neuroborder_tools/go_enrichment_analysis/go_enrichment_analysis.xml" />
+    <tool file="neuroborder_tools/encode_bulk_atac_seq_pipeline/encode_bulk_atac_seq_pipeline.xml" />
+    <tool file="neuroborder_tools/encode_bulk_chip_seq_pipeline/encode_bulk_chip_seq_pipeline.xml" />
   </section>
 </toolbox>

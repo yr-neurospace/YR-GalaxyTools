@@ -23,6 +23,7 @@
             <option value="/data/biodatabase/species/hg38/encode_references/bulk_rna_seq/hg38_metadata.tsv">hg38</option>
             <option value="/data/biodatabase/species/mRatBN7/encode_references/bulk_rna_seq/mRatBN7_metadata.tsv">mRatBN7</option>
             <option value="/data/biodatabase/species/mink_slb_v1/encode_references/bulk_rna_seq/mink_metadata.tsv">mink_slb_v1</option>
+            <option value="/data/biodatabase/species/sugar_glider_slb_v1/encode_references/bulk_rna_seq/sugarglider_metadata.tsv">sugarglider_slb_v1</option>
         </param>
     </inputs>
     <outputs>

@@ -9,7 +9,7 @@ TEMPLATES = Dict("rna_pipeline_wdl" => "/data/softwares/encode_pipeline/rna-seq-
     "rna_se_json_without_kallisto" => "/data/softwares/encode_pipeline/rna-seq-pipeline_v1.2.4/json_templates/rna_input_no_kallisto_se.json",
     "backend_conf" => "/data/softwares/encode_pipeline/caper/local.conf")
 
-s = ArgParseSettings(description="Run ENCODE RNA-seq pipeline.")
+s = ArgParseSettings(description="Run ENCODE RNA-Seq pipeline.")
 @add_arg_table s begin
     "--names"
     help = "input file names separated by white space"
@@ -86,7 +86,7 @@ metadata_df = CSV.read(args["metadata_tsv"][1], DataFrame; header=["key", "value
 metadata_dict = Dict(zip(metadata_df.key, metadata_df.value))
 
 # run pipeline in either paired-end or single-end mode
-@info "start running ENCODE RNA-seq pipeline over all samples ..."
+@info "start running ENCODE RNA-Seq pipeline over all samples ..."
 if files_read_type == "paired"
     input_json = open(TEMPLATES["rna_pe_json_without_kallisto"], "r") do io
         JSON.parse(io)
@@ -148,7 +148,7 @@ elseif files_read_type == "single"
 else
     @error "invalid read type (read type can be either 'paired' or 'single')"
 end
-@info "running ENCODE RNA-seq pipeline over all samples done!"
+@info "running ENCODE RNA-Seq pipeline over all samples done!"
 
 # collect results
 @info "start collecting outputs ..."
